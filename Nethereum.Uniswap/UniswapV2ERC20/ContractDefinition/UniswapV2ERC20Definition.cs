@@ -10,21 +10,21 @@ using Nethereum.Contracts.CQS;
 using Nethereum.Contracts;
 using System.Threading;
 
-namespace Nethereum.Uniswap.Contracts.IUniswapV2ERC20.ContractDefinition
+namespace Nethereum.Uniswap.Contracts.UniswapV2ERC20.ContractDefinition
 {
 
 
-    public partial class IUniswapV2ERC20Deployment : IUniswapV2ERC20DeploymentBase
+    public partial class UniswapV2ERC20Deployment : UniswapV2ERC20DeploymentBase
     {
-        public IUniswapV2ERC20Deployment() : base(BYTECODE) { }
-        public IUniswapV2ERC20Deployment(string byteCode) : base(byteCode) { }
+        public UniswapV2ERC20Deployment() : base(BYTECODE) { }
+        public UniswapV2ERC20Deployment(string byteCode) : base(byteCode) { }
     }
 
-    public class IUniswapV2ERC20DeploymentBase : ContractDeploymentMessage
+    public class UniswapV2ERC20DeploymentBase : ContractDeploymentMessage
     {
         public static string BYTECODE = "";
-        public IUniswapV2ERC20DeploymentBase() : base(BYTECODE) { }
-        public IUniswapV2ERC20DeploymentBase(string byteCode) : base(byteCode) { }
+        public UniswapV2ERC20DeploymentBase() : base(BYTECODE) { }
+        public UniswapV2ERC20DeploymentBase(string byteCode) : base(byteCode) { }
 
     }
 

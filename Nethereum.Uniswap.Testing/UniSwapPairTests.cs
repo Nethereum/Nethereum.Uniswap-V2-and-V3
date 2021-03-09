@@ -1,18 +1,24 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using Nethereum.Signer;
 using Nethereum.Util;
 using Nethereum.Web3.Accounts;
 using Nethereum.XUnitEthereumClients;
 using Xunit;
-using Nethereum.Uniswap.Contracts.ERC20Token;
 using Nethereum.Web3;
-using Nethereum.Uniswap.Contracts.ERC20Token.ContractDefinition;
 using Nethereum.Contracts;
 using Nethereum.RPC.Eth.DTOs;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Nethereum.BlockchainProcessing.ProgressRepositories;
+using Nethereum.Uniswap.Contracts.UniswapV2Factory;
+using Nethereum.Uniswap.Contracts.UniswapV2Pair;
+using Nethereum.Uniswap.Contracts.UniswapV2Pair.ContractDefinition;
+using Nethereum.Uniswap.Contracts.UniswapV2Router01.ContractDefinition;
+using Nethereum.Uniswap.Contracts.UniswapV2Router02;
+using Nethereum.Uniswap.Contracts.UniswapV2Router02.ContractDefinition;
 
 namespace Nethereum.Uniswap.Testing
 {
@@ -27,125 +33,101 @@ namespace Nethereum.Uniswap.Testing
         }
 
         [Fact]
-        public async void ShouldTransferToken()
+        public async void ShouldBeAbleToGetThePairForDaiWeth()
         {
-
-/*
-            var destinationAddress = "0x6C547791C3573c2093d81b919350DB1094707011";
-            //Using ropsten infura if wanted for only a tests
-            //var web3 = _ethereumClientIntegrationFixture.GetInfuraWeb3(InfuraNetwork.Ropsten);
             var web3 = _ethereumClientIntegrationFixture.GetWeb3();
-
-            var erc20TokenDeployment = new ERC20TokenDeployment() { DecimalUnits = 18, TokenName = "TST", TokenSymbol = "TST", InitialAmount = Web3.Convert.ToWei(10000) };
-
-            //Deploy our custom token
-            var tokenDeploymentReceipt = await ERC20TokenService.DeployContractAndWaitForReceiptAsync(web3, erc20TokenDeployment);
-            
-            //Creating a new service
-            var tokenService = new ERC20TokenService(web3, tokenDeploymentReceipt.ContractAddress);
-
-            //using Web3.Convert.ToWei as it has 18 decimal places (default)
-            var transferReceipt = await tokenService.TransferRequestAndWaitForReceiptAsync(destinationAddress, Web3.Convert.ToWei(10, 18));
-            
-            //validate the current balance
-            var balance = await tokenService.BalanceOfQueryAsync(destinationAddress);
-            Assert.Equal(10, Web3.Convert.FromWei(balance));
-
-            //retrieving the event from the receipt
-            var eventTransfer = transferReceipt.DecodeAllEvents<TransferEventDTO>()[0];
-
-            Assert.Equal(10, Web3.Convert.FromWei(eventTransfer.Event.Value));
-            Assert.True(destinationAddress.IsTheSameAddress(eventTransfer.Event.To));
-*/
+            var factoryAddress = "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f";
+            var factoryService = new UniswapV2FactoryService(web3, factoryAddress);
+            var weth = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
+            var dai = "0x6b175474e89094c44da98b954eedeac495271d0f";
+            var pair = await factoryService.GetPairQueryAsync(weth, dai);
+            Assert.True(pair.IsTheSameAddress("0xa478c2975ab1ea89e8196811f51a7b7ade33eb11"));
         }
 
 
         [Fact]
-        public async void ShouldGetTransferEventLogs()
+        public async Task ShouldBeAbleToSwapEthForDai()
         {
-/*
-            var destinationAddress = "0x6C547791C3573c2093d81b919350DB1094707011";
-            //Using ropsten infura if wanted for only a tests
-            //var web3 = _ethereumClientIntegrationFixture.GetInfuraWeb3(InfuraNetwork.Ropsten);
             var web3 = _ethereumClientIntegrationFixture.GetWeb3();
+            var myAddress = web3.TransactionManager.Account.Address;
+            var routerV2Address = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D";
+            var uniswapV2Router02Service = new UniswapV2Router02Service(web3, routerV2Address);
+            var weth = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
+            var dai = "0x6b175474e89094c44da98b954eedeac495271d0f";
+            var serviceDAI = new StandardTokenEIP20.StandardTokenService(web3, dai);
 
-            var erc20TokenDeployment = new ERC20TokenDeployment() { DecimalUnits = 18, TokenName = "TST", TokenSymbol = "TST", InitialAmount = Web3.Convert.ToWei(10000) };
-
-            //Deploy our custom token
-            var tokenDeploymentReceipt = await ERC20TokenService.DeployContractAndWaitForReceiptAsync(web3, erc20TokenDeployment);
+            var path = new List<string> {weth, dai};
+            var amountEth = Web3.Web3.Convert.ToWei(100); //10 Ether
             
-            //Creating a new service
-            var tokenService = new ERC20TokenService(web3, tokenDeploymentReceipt.ContractAddress);
-
-            //using Web3.Convert.ToWei as it has 18 decimal places (default)
-            var transferReceipt1 = await tokenService.TransferRequestAndWaitForReceiptAsync(destinationAddress, Web3.Convert.ToWei(10, 18));
-            var transferReceipt2 = await tokenService.TransferRequestAndWaitForReceiptAsync(destinationAddress, Web3.Convert.ToWei(10, 18));
-
-            var transferEvent = web3.Eth.GetEvent<TransferEventDTO>();
-            var transferFilter = transferEvent.GetFilterBuilder().AddTopic(x => x.To, destinationAddress).Build(tokenService.ContractHandler.ContractAddress,
-                new BlockRange(transferReceipt1.BlockNumber, transferReceipt2.BlockNumber));
-         
-            var transferEvents = await transferEvent.GetAllChanges(transferFilter);
-
-            Assert.Equal(2, transferEvents.Count); 
-*/
-        }
-
-
-        [Fact]
-        public async void ShouldGetTransferEventLogsUsingProcessorAndStoreThem()
-        {
-/*
-            var destinationAddress = "0x6C547791C3573c2093d81b919350DB1094707011";
-            //Using ropsten infura if wanted for only a tests
-            //var web3 = _ethereumClientIntegrationFixture.GetInfuraWeb3(InfuraNetwork.Ropsten);
-            var web3 = _ethereumClientIntegrationFixture.GetWeb3();
-
-            var erc20TokenDeployment = new ERC20TokenDeployment() { DecimalUnits = 18, TokenName = "TST", TokenSymbol = "TST", InitialAmount = Web3.Convert.ToWei(10000) };
-
-            //Deploy our custom token
-            var tokenDeploymentReceipt = await ERC20TokenService.DeployContractAndWaitForReceiptAsync(web3, erc20TokenDeployment);
-
-            //Creating a new service
-            var tokenService = new ERC20TokenService(web3, tokenDeploymentReceipt.ContractAddress);
-
-            //using Web3.Convert.ToWei as it has 18 decimal places (default)
-            var transferReceipt1 = await tokenService.TransferRequestAndWaitForReceiptAsync(destinationAddress, Web3.Convert.ToWei(10, 18));
-            var transferReceipt2 = await tokenService.TransferRequestAndWaitForReceiptAsync(destinationAddress, Web3.Convert.ToWei(10, 18));
-
-
-            //We are storing in a database the logs
-            var storedMockedEvents = new List<EventLog<TransferEventDTO>>();
-            //storage action mock
-            Task StoreLogAsync(EventLog<TransferEventDTO> eventLog)
+            var amounts = await uniswapV2Router02Service.GetAmountsOutQueryAsync(amountEth, path);
+            
+            var deadline = DateTimeOffset.Now.AddMinutes(15).ToUnixTimeSeconds();
+            
+            var swapEthForExactTokens = new Contracts.UniswapV2Router02.ContractDefinition.SwapExactETHForTokensFunction()
             {
-                storedMockedEvents.Add(eventLog);
-                return Task.CompletedTask;
-            }
+                AmountOutMin = amounts[1],
+                Path = path,
+                Deadline = deadline,
+                To = myAddress,
+                AmountToSend = amountEth
+            };
+           
+            var balanceOriginal = await serviceDAI.BalanceOfQueryAsync(myAddress);
 
-            //progress repository to restart processing (simple in memory one, use the other adapters for other storage possibilities)
-            var blockProgressRepository = new InMemoryBlockchainProgressRepository(transferReceipt1.BlockNumber.Value - 1);
 
-            //create our processor to retrieve transfers
-            //restrict the processor to Transfers for a specific contract address
-            var processor = web3.Processing.Logs.CreateProcessorForContract<TransferEventDTO>(
-                tokenService.ContractHandler.ContractAddress, //the contract to monitor
-                StoreLogAsync, //action to perform when a log is found
-                minimumBlockConfirmations: 0,  // number of block confirmations to wait
-                blockProgressRepository: blockProgressRepository //repository to track the progress
-                );
+            var swapReceipt = await uniswapV2Router02Service.SwapExactETHForTokensRequestAndWaitForReceiptAsync(swapEthForExactTokens);
+            var swapLog = swapReceipt.Logs.DecodeAllEvents<SwapEventDTO>();
+            var transferLog = swapReceipt.Logs.DecodeAllEvents<TransferEventDTO>();
 
-            //if we need to stop the processor mid execution - call cancel on the token
-            var cancellationToken = new CancellationToken();
+            var balanceNew = await serviceDAI.BalanceOfQueryAsync(myAddress);
+            
+            Assert.Equal(swapLog[0].Event.Amount0Out, balanceNew - balanceOriginal);
 
-            //crawl the required block range
-            await processor.ExecuteAsync(
-                cancellationToken: cancellationToken,
-                toBlockNumber: transferReceipt2.BlockNumber.Value,
-                startAtBlockNumberIfNotProcessed: transferReceipt1.BlockNumber.Value);
+        }
 
-            Assert.Equal(2, storedMockedEvents.Count);
-*/
+        [Fact]
+        public async Task ShouldBeAbleToSwapEthForDaiThenUSDC()
+        {
+            await ShouldBeAbleToSwapEthForDai(); //lets get some DAI
+
+
+            var web3 = _ethereumClientIntegrationFixture.GetWeb3();
+            var myAddress = web3.TransactionManager.Account.Address;
+            var routerV2Address = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D";
+            var uniswapV2Router02Service = new UniswapV2Router02Service(web3, routerV2Address);
+            var usdc = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48";
+            var dai = "0x6b175474e89094c44da98b954eedeac495271d0f";
+            var serviceDAI = new StandardTokenEIP20.StandardTokenService(web3, dai);
+            var serviceUSDC = new StandardTokenEIP20.StandardTokenService(web3, usdc);
+
+            var path = new List<string> { dai, usdc };
+            var amountDAI = Web3.Web3.Convert.ToWei(10000);  //DAI 18 dec
+
+            var amounts = await uniswapV2Router02Service.GetAmountsOutQueryAsync(amountDAI, path);
+
+            var deadline = DateTimeOffset.Now.AddMinutes(15).ToUnixTimeSeconds();
+
+            var swapTokensForExactTokens = new Contracts.UniswapV2Router02.ContractDefinition.SwapExactTokensForTokensFunction()
+            {
+                AmountOutMin = amounts[1],
+                Path = path,
+                Deadline = deadline,
+                To = myAddress,
+                AmountIn = amountDAI
+            };
+
+            var balanceOriginal = await serviceUSDC.BalanceOfQueryAsync(myAddress);
+
+            var approveReceipt = await serviceDAI.ApproveRequestAndWaitForReceiptAsync(routerV2Address, amountDAI);
+
+            var swapReceipt = await uniswapV2Router02Service.SwapExactTokensForTokensRequestAndWaitForReceiptAsync(swapTokensForExactTokens);
+            var swapLog = swapReceipt.Logs.DecodeAllEvents<SwapEventDTO>();
+            var transferLog = swapReceipt.Logs.DecodeAllEvents<TransferEventDTO>();
+
+            var balanceNew = await serviceUSDC.BalanceOfQueryAsync(myAddress);
+
+            Assert.Equal(swapLog[0].Event.Amount1Out, balanceNew - balanceOriginal);
+
         }
 
     }

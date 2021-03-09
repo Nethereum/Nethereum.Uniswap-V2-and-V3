@@ -10,21 +10,21 @@ using Nethereum.Contracts.CQS;
 using Nethereum.Contracts;
 using System.Threading;
 
-namespace Nethereum.Uniswap.Contracts.IUniswapV2Router01.ContractDefinition
+namespace Nethereum.Uniswap.Contracts.UniswapV2Router01.ContractDefinition
 {
 
 
-    public partial class IUniswapV2Router01Deployment : IUniswapV2Router01DeploymentBase
+    public partial class UniswapV2Router01Deployment : UniswapV2Router01DeploymentBase
     {
-        public IUniswapV2Router01Deployment() : base(BYTECODE) { }
-        public IUniswapV2Router01Deployment(string byteCode) : base(byteCode) { }
+        public UniswapV2Router01Deployment() : base(BYTECODE) { }
+        public UniswapV2Router01Deployment(string byteCode) : base(byteCode) { }
     }
 
-    public class IUniswapV2Router01DeploymentBase : ContractDeploymentMessage
+    public class UniswapV2Router01DeploymentBase : ContractDeploymentMessage
     {
         public static string BYTECODE = "";
-        public IUniswapV2Router01DeploymentBase() : base(BYTECODE) { }
-        public IUniswapV2Router01DeploymentBase(string byteCode) : base(byteCode) { }
+        public UniswapV2Router01DeploymentBase() : base(BYTECODE) { }
+        public UniswapV2Router01DeploymentBase(string byteCode) : base(byteCode) { }
 
     }
 

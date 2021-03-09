@@ -8,7 +8,7 @@ pragma solidity >=0.6.2;
 // You can add this typing "uniV2Router01" 
 import './IUniswapV2Router01.sol';
 
-interface IUniswapV2Router02 is IUniswapV2Router01 {
+interface UniswapV2Router02 is UniswapV2Router01 {
     function removeLiquidityETHSupportingFeeOnTransferTokens(
         address token,
         uint liquidity,

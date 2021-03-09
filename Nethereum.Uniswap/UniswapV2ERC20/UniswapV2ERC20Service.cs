@@ -10,33 +10,33 @@ using Nethereum.Contracts.CQS;
 using Nethereum.Contracts.ContractHandlers;
 using Nethereum.Contracts;
 using System.Threading;
-using Nethereum.Uniswap.Contracts.IUniswapV2ERC20.ContractDefinition;
+using Nethereum.Uniswap.Contracts.UniswapV2ERC20.ContractDefinition;
 
-namespace Nethereum.Uniswap.Contracts.IUniswapV2ERC20
+namespace Nethereum.Uniswap.Contracts.UniswapV2ERC20
 {
-    public partial class IUniswapV2ERC20Service
+    public partial class UniswapV2ERC20Service
     {
-        public static Task<TransactionReceipt> DeployContractAndWaitForReceiptAsync(Nethereum.Web3.Web3 web3, IUniswapV2ERC20Deployment iUniswapV2ERC20Deployment, CancellationTokenSource cancellationTokenSource = null)
+        public static Task<TransactionReceipt> DeployContractAndWaitForReceiptAsync(Nethereum.Web3.Web3 web3, UniswapV2ERC20Deployment uniswapV2ERC20Deployment, CancellationTokenSource cancellationTokenSource = null)
         {
-            return web3.Eth.GetContractDeploymentHandler<IUniswapV2ERC20Deployment>().SendRequestAndWaitForReceiptAsync(iUniswapV2ERC20Deployment, cancellationTokenSource);
+            return web3.Eth.GetContractDeploymentHandler<UniswapV2ERC20Deployment>().SendRequestAndWaitForReceiptAsync(uniswapV2ERC20Deployment, cancellationTokenSource);
         }
 
-        public static Task<string> DeployContractAsync(Nethereum.Web3.Web3 web3, IUniswapV2ERC20Deployment iUniswapV2ERC20Deployment)
+        public static Task<string> DeployContractAsync(Nethereum.Web3.Web3 web3, UniswapV2ERC20Deployment uniswapV2ERC20Deployment)
         {
-            return web3.Eth.GetContractDeploymentHandler<IUniswapV2ERC20Deployment>().SendRequestAsync(iUniswapV2ERC20Deployment);
+            return web3.Eth.GetContractDeploymentHandler<UniswapV2ERC20Deployment>().SendRequestAsync(uniswapV2ERC20Deployment);
         }
 
-        public static async Task<IUniswapV2ERC20Service> DeployContractAndGetServiceAsync(Nethereum.Web3.Web3 web3, IUniswapV2ERC20Deployment iUniswapV2ERC20Deployment, CancellationTokenSource cancellationTokenSource = null)
+        public static async Task<UniswapV2ERC20Service> DeployContractAndGetServiceAsync(Nethereum.Web3.Web3 web3, UniswapV2ERC20Deployment uniswapV2ERC20Deployment, CancellationTokenSource cancellationTokenSource = null)
         {
-            var receipt = await DeployContractAndWaitForReceiptAsync(web3, iUniswapV2ERC20Deployment, cancellationTokenSource);
-            return new IUniswapV2ERC20Service(web3, receipt.ContractAddress);
+            var receipt = await DeployContractAndWaitForReceiptAsync(web3, uniswapV2ERC20Deployment, cancellationTokenSource);
+            return new UniswapV2ERC20Service(web3, receipt.ContractAddress);
         }
 
         protected Nethereum.Web3.Web3 Web3{ get; }
 
         public ContractHandler ContractHandler { get; }
 
-        public IUniswapV2ERC20Service(Nethereum.Web3.Web3 web3, string contractAddress)
+        public UniswapV2ERC20Service(Nethereum.Web3.Web3 web3, string contractAddress)
         {
             Web3 = web3;
             ContractHandler = web3.Eth.GetContractHandler(contractAddress);

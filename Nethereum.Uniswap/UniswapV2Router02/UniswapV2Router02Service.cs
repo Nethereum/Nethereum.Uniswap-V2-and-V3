@@ -10,33 +10,33 @@ using Nethereum.Contracts.CQS;
 using Nethereum.Contracts.ContractHandlers;
 using Nethereum.Contracts;
 using System.Threading;
-using Nethereum.Uniswap.Contracts.IUniswapV2Router02.ContractDefinition;
+using Nethereum.Uniswap.Contracts.UniswapV2Router02.ContractDefinition;
 
-namespace Nethereum.Uniswap.Contracts.IUniswapV2Router02
+namespace Nethereum.Uniswap.Contracts.UniswapV2Router02
 {
-    public partial class IUniswapV2Router02Service
+    public partial class UniswapV2Router02Service
     {
-        public static Task<TransactionReceipt> DeployContractAndWaitForReceiptAsync(Nethereum.Web3.Web3 web3, IUniswapV2Router02Deployment iUniswapV2Router02Deployment, CancellationTokenSource cancellationTokenSource = null)
+        public static Task<TransactionReceipt> DeployContractAndWaitForReceiptAsync(Nethereum.Web3.Web3 web3, UniswapV2Router02Deployment uniswapV2Router02Deployment, CancellationTokenSource cancellationTokenSource = null)
         {
-            return web3.Eth.GetContractDeploymentHandler<IUniswapV2Router02Deployment>().SendRequestAndWaitForReceiptAsync(iUniswapV2Router02Deployment, cancellationTokenSource);
+            return web3.Eth.GetContractDeploymentHandler<UniswapV2Router02Deployment>().SendRequestAndWaitForReceiptAsync(uniswapV2Router02Deployment, cancellationTokenSource);
         }
 
-        public static Task<string> DeployContractAsync(Nethereum.Web3.Web3 web3, IUniswapV2Router02Deployment iUniswapV2Router02Deployment)
+        public static Task<string> DeployContractAsync(Nethereum.Web3.Web3 web3, UniswapV2Router02Deployment uniswapV2Router02Deployment)
         {
-            return web3.Eth.GetContractDeploymentHandler<IUniswapV2Router02Deployment>().SendRequestAsync(iUniswapV2Router02Deployment);
+            return web3.Eth.GetContractDeploymentHandler<UniswapV2Router02Deployment>().SendRequestAsync(uniswapV2Router02Deployment);
         }
 
-        public static async Task<IUniswapV2Router02Service> DeployContractAndGetServiceAsync(Nethereum.Web3.Web3 web3, IUniswapV2Router02Deployment iUniswapV2Router02Deployment, CancellationTokenSource cancellationTokenSource = null)
+        public static async Task<UniswapV2Router02Service> DeployContractAndGetServiceAsync(Nethereum.Web3.Web3 web3, UniswapV2Router02Deployment uniswapV2Router02Deployment, CancellationTokenSource cancellationTokenSource = null)
         {
-            var receipt = await DeployContractAndWaitForReceiptAsync(web3, iUniswapV2Router02Deployment, cancellationTokenSource);
-            return new IUniswapV2Router02Service(web3, receipt.ContractAddress);
+            var receipt = await DeployContractAndWaitForReceiptAsync(web3, uniswapV2Router02Deployment, cancellationTokenSource);
+            return new UniswapV2Router02Service(web3, receipt.ContractAddress);
         }
 
         protected Nethereum.Web3.Web3 Web3{ get; }
 
         public ContractHandler ContractHandler { get; }
 
-        public IUniswapV2Router02Service(Nethereum.Web3.Web3 web3, string contractAddress)
+        public UniswapV2Router02Service(Nethereum.Web3.Web3 web3, string contractAddress)
         {
             Web3 = web3;
             ContractHandler = web3.Eth.GetContractHandler(contractAddress);

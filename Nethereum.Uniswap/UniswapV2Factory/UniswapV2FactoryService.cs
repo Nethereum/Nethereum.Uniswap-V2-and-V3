@@ -10,33 +10,33 @@ using Nethereum.Contracts.CQS;
 using Nethereum.Contracts.ContractHandlers;
 using Nethereum.Contracts;
 using System.Threading;
-using Nethereum.Uniswap.Contracts.IUniswapV2Factory.ContractDefinition;
+using Nethereum.Uniswap.Contracts.UniswapV2Factory.ContractDefinition;
 
-namespace Nethereum.Uniswap.Contracts.IUniswapV2Factory
+namespace Nethereum.Uniswap.Contracts.UniswapV2Factory
 {
-    public partial class IUniswapV2FactoryService
+    public partial class UniswapV2FactoryService
     {
-        public static Task<TransactionReceipt> DeployContractAndWaitForReceiptAsync(Nethereum.Web3.Web3 web3, IUniswapV2FactoryDeployment iUniswapV2FactoryDeployment, CancellationTokenSource cancellationTokenSource = null)
+        public static Task<TransactionReceipt> DeployContractAndWaitForReceiptAsync(Nethereum.Web3.Web3 web3, UniswapV2FactoryDeployment uniswapV2FactoryDeployment, CancellationTokenSource cancellationTokenSource = null)
         {
-            return web3.Eth.GetContractDeploymentHandler<IUniswapV2FactoryDeployment>().SendRequestAndWaitForReceiptAsync(iUniswapV2FactoryDeployment, cancellationTokenSource);
+            return web3.Eth.GetContractDeploymentHandler<UniswapV2FactoryDeployment>().SendRequestAndWaitForReceiptAsync(uniswapV2FactoryDeployment, cancellationTokenSource);
         }
 
-        public static Task<string> DeployContractAsync(Nethereum.Web3.Web3 web3, IUniswapV2FactoryDeployment iUniswapV2FactoryDeployment)
+        public static Task<string> DeployContractAsync(Nethereum.Web3.Web3 web3, UniswapV2FactoryDeployment uniswapV2FactoryDeployment)
         {
-            return web3.Eth.GetContractDeploymentHandler<IUniswapV2FactoryDeployment>().SendRequestAsync(iUniswapV2FactoryDeployment);
+            return web3.Eth.GetContractDeploymentHandler<UniswapV2FactoryDeployment>().SendRequestAsync(uniswapV2FactoryDeployment);
         }
 
-        public static async Task<IUniswapV2FactoryService> DeployContractAndGetServiceAsync(Nethereum.Web3.Web3 web3, IUniswapV2FactoryDeployment iUniswapV2FactoryDeployment, CancellationTokenSource cancellationTokenSource = null)
+        public static async Task<UniswapV2FactoryService> DeployContractAndGetServiceAsync(Nethereum.Web3.Web3 web3, UniswapV2FactoryDeployment uniswapV2FactoryDeployment, CancellationTokenSource cancellationTokenSource = null)
         {
-            var receipt = await DeployContractAndWaitForReceiptAsync(web3, iUniswapV2FactoryDeployment, cancellationTokenSource);
-            return new IUniswapV2FactoryService(web3, receipt.ContractAddress);
+            var receipt = await DeployContractAndWaitForReceiptAsync(web3, uniswapV2FactoryDeployment, cancellationTokenSource);
+            return new UniswapV2FactoryService(web3, receipt.ContractAddress);
         }
 
         protected Nethereum.Web3.Web3 Web3{ get; }
 
         public ContractHandler ContractHandler { get; }
 
-        public IUniswapV2FactoryService(Nethereum.Web3.Web3 web3, string contractAddress)
+        public UniswapV2FactoryService(Nethereum.Web3.Web3 web3, string contractAddress)
         {
             Web3 = web3;
             ContractHandler = web3.Eth.GetContractHandler(contractAddress);
