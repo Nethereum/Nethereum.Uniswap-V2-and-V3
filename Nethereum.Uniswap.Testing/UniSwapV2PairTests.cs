@@ -23,11 +23,11 @@ using Nethereum.Uniswap.Contracts.UniswapV2Router02.ContractDefinition;
 namespace Nethereum.Uniswap.Testing
 {
     [Collection(EthereumClientIntegrationFixture.ETHEREUM_CLIENT_COLLECTION_DEFAULT)]
-    public class UniSwapPairTests
+    public class UniSwapV2PairTests
     {
         private readonly EthereumClientIntegrationFixture _ethereumClientIntegrationFixture;
 
-        public UniSwapPairTests(EthereumClientIntegrationFixture ethereumClientIntegrationFixture)
+        public UniSwapV2PairTests(EthereumClientIntegrationFixture ethereumClientIntegrationFixture)
         {
             _ethereumClientIntegrationFixture = ethereumClientIntegrationFixture;
         }
