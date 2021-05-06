@@ -1,4 +1,4 @@
-# Nethereum.UniswapV2
+# Nethereum.Uniswap V2 and V3
 Template environment and samples (unit tests) to work with Uniswap V2 smart contracts in a forked environment using Hardhat.
 
 To enable hardhat.
