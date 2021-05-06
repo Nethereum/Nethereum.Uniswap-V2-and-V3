@@ -1,6 +1,8 @@
 # Nethereum.Uniswap V2 and V3
 Template environment and samples (unit tests) to work with Uniswap V2 smart contracts in a forked environment using Hardhat.
 
+TODO: V3 Sample
+
 To enable hardhat.
 
 1. Go to the directory testchains\hardhat and run ```npm install```
