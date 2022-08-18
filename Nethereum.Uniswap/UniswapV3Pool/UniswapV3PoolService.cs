@@ -351,11 +351,11 @@ namespace Nethereum.Uniswap.Contracts.UniswapV3Pool
             return ContractHandler.QueryDeserializingToObjectAsync<PositionsFunction, PositionsOutputDTO>(positionsFunction, blockParameter);
         }
 
-        public Task<PositionsOutputDTO> PositionsQueryAsync(byte[] key, BlockParameter blockParameter = null)
+        public Task<PositionsOutputDTO> PositionsQueryAsync(BigInteger tokenId, BlockParameter blockParameter = null)
         {
             var positionsFunction = new PositionsFunction();
-                positionsFunction.Key = key;
-            
+            positionsFunction.TokenId = tokenId;
+
             return ContractHandler.QueryDeserializingToObjectAsync<PositionsFunction, PositionsOutputDTO>(positionsFunction, blockParameter);
         }
 
