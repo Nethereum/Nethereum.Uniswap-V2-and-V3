@@ -192,8 +192,8 @@ namespace Nethereum.Uniswap.Contracts.UniswapV3Pool.ContractDefinition
     [Function("positions", typeof(PositionsOutputDTO))]
     public class PositionsFunctionBase : FunctionMessage
     {
-        [Parameter("bytes32", "key", 1)]
-        public virtual byte[] Key { get; set; }
+        [Parameter("uint256", "tokenId", 1)]
+        public virtual BigInteger TokenId { get; set; }
     }
 
     public partial class ProtocolFeesFunction : ProtocolFeesFunctionBase { }
@@ -579,15 +579,39 @@ namespace Nethereum.Uniswap.Contracts.UniswapV3Pool.ContractDefinition
     [FunctionOutput]
     public class PositionsOutputDTOBase : IFunctionOutputDTO 
     {
-        [Parameter("uint128", "_liquidity", 1)]
+        [Parameter("uint96", "nonce", 1)]
+        public virtual BigInteger Nonce { get; set; }
+
+        [Parameter("address", "operator", 2)]
+        public virtual string Operator { get; set; }
+
+        [Parameter("address", "token0", 3)]
+        public virtual string Token0 { get; set; }
+
+        [Parameter("address", "token1", 4)]
+        public virtual string Token1 { get; set; }
+
+        [Parameter("uint24", "fee", 5)]
+        public virtual int Fee { get; set; }
+
+        [Parameter("int24 ", "tickLower", 6)]
+        public virtual int TickLower { get; set; }
+
+        [Parameter("int24 ", "tickUpper", 7)]
+        public virtual int TickUpper { get; set; }
+
+        [Parameter("uint128", "liquidity", 8)]
         public virtual BigInteger Liquidity { get; set; }
-        [Parameter("uint256", "feeGrowthInside0LastX128", 2)]
+
+        [Parameter("uint256", "feeGrowthInside0LastX128", 9)]
         public virtual BigInteger FeeGrowthInside0LastX128 { get; set; }
-        [Parameter("uint256", "feeGrowthInside1LastX128", 3)]
+
+        [Parameter("uint256", "feeGrowthInside1LastX128", 10)]
         public virtual BigInteger FeeGrowthInside1LastX128 { get; set; }
-        [Parameter("uint128", "tokensOwed0", 4)]
+
+        [Parameter("uint128", "tokensOwed0", 11)]
         public virtual BigInteger TokensOwed0 { get; set; }
-        [Parameter("uint128", "tokensOwed1", 5)]
+        [Parameter("uint128", "tokensOwed1", 12)]
         public virtual BigInteger TokensOwed1 { get; set; }
     }
 
